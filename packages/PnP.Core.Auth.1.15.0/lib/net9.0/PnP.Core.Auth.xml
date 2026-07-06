@@ -1,0 +1,1201 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PnP.Core.Auth</name>
+    </assembly>
+    <members>
+        <member name="F:PnP.Core.Auth.AuthGlobals.OrganizationsTenantId">
+            <summary>
+            Defines the multi-tenant ID for multi-tenant apps
+            </summary>
+        </member>
+        <member name="F:PnP.Core.Auth.AuthGlobals.DefaultRedirectUri">
+            <summary>
+            Defines the default Redirect URI for apps that do not rely on their own Redirect URI
+            </summary>
+        </member>
+        <member name="F:PnP.Core.Auth.AuthGlobals.AuthorityFormat">
+            <summary>
+            The format string for the Authority of an OAuth request against AAD
+            </summary>
+        </member>
+        <member name="T:PnP.Core.Auth.OnBehalfOfAuthenticationProvider">
+            <summary>
+            Authentication Provider based on the OnBehalfOf flow
+            </summary>
+            <remarks>
+            You can find further details about the On-Behalf-Of flow here: https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-on-behalf-of-flow
+            </remarks>
+        </member>
+        <member name="P:PnP.Core.Auth.OnBehalfOfAuthenticationProvider.Certificate">
+            <summary>
+            The X.509 Certificate to use for app authentication
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.OnBehalfOfAuthenticationProvider.ClientSecret">
+            <summary>
+            The ClientSecret to authenticate the app with ClientId
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.OnBehalfOfAuthenticationProvider.UserTokenProvider">
+            <summary>
+            A function providing the consumer user access token to use for the On-Behalf-Of flow
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.OnBehalfOfAuthenticationProvider.UseSharedCache">
+            <summary>
+            Share the cache between all ClientApplication objects. The cache becomes static. Defaults to false.
+            </summary>
+        </member>
+        <member name="M:PnP.Core.Auth.OnBehalfOfAuthenticationProvider.#ctor(System.String,System.String,System.Security.SecureString,System.Func{System.String},System.Boolean)">
+            <summary>
+            Public constructor for external consumers of the library
+            </summary>
+            <param name="clientId">The Client ID for the Authentication Provider</param>
+            <param name="tenantId">The Tenant ID for the Authentication Provider</param>
+            <param name="clientSecret">The Client Secret of the app</param>
+            <param name="userTokenProvider">A function providing the consumer user access token to use for the On-Behalf-Of flow</param>
+            <param name="useSharedCache">Share the cache between all ClientApplication objects. The cache becomes static. Defaults to false</param>
+        </member>
+        <member name="M:PnP.Core.Auth.OnBehalfOfAuthenticationProvider.#ctor(System.String,System.String,PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationOnBehalfOfOptions,System.Func{System.String},System.Boolean)">
+            <summary>
+            Public constructor for external consumers of the library
+            </summary>
+            <param name="clientId">The Client ID for the Authentication Provider</param>
+            <param name="tenantId">The Tenant ID for the Authentication Provider</param>
+            <param name="options">Options for the authentication provider</param>
+            <param name="userTokenProvider">A function providing the consumer user access token to use for the On-Behalf-Of flow</param>
+            <param name="useSharedCache">Share the cache between all ClientApplication objects. The cache becomes static. Defaults to false</param>
+        </member>
+        <member name="M:PnP.Core.Auth.OnBehalfOfAuthenticationProvider.#ctor(System.String,System.String,System.Security.Cryptography.X509Certificates.StoreName,System.Security.Cryptography.X509Certificates.StoreLocation,System.String,System.Func{System.String},System.Boolean)">
+            <summary>
+            Public constructor for external consumers of the library
+            </summary>
+            <param name="clientId">The Client ID for the Authentication Provider</param>
+            <param name="tenantId">The Tenant ID for the Authentication Provider</param>
+            <param name="storeName">The Store Name to get the X.509 certificate from</param>
+            <param name="storeLocation">The Store Location to get the X.509 certificate from</param>
+            <param name="thumbprint">The Thumbprint of the X.509 certificate</param>
+            <param name="userTokenProvider">A function providing the consumer user access token to use for the On-Behalf-Of flow</param>
+            <param name="useSharedCache">Share the cache between all ClientApplication objects. The cache becomes static. Defaults to false</param>
+        </member>
+        <member name="M:PnP.Core.Auth.OnBehalfOfAuthenticationProvider.#ctor(System.String,System.String,System.Security.Cryptography.X509Certificates.X509Certificate2,System.Func{System.String},System.Boolean)">
+            <summary>
+            Public constructor for external consumers of the library
+            </summary>
+            <param name="clientId">The Client ID for the Authentication Provider</param>
+            <param name="tenantId">The Tenant ID for the Authentication Provider</param>
+            <param name="certificate">The X.509 certificate to use for authentication</param>
+            <param name="userTokenProvider">A function providing the consumer user access token to use for the On-Behalf-Of flow</param>
+            <param name="useSharedCache">Share the cache between all ClientApplication objects. The cache becomes static. Defaults to false</param>
+        </member>
+        <member name="M:PnP.Core.Auth.OnBehalfOfAuthenticationProvider.#ctor(Microsoft.Extensions.Logging.ILogger{PnP.Core.Auth.OAuthAuthenticationProvider},Microsoft.Identity.Client.IMsalHttpClientFactory)">
+            <summary>
+            Public constructor leveraging DI to initialize the ILogger and IMsalHttpClientFactory interfaces
+            </summary>
+            <param name="logger">The instance of the logger service provided by DI</param>
+            <param name="msalHttpClientFactory">The instance of the Msal Http Client Factory service provided by DI</param>
+        </member>
+        <member name="M:PnP.Core.Auth.OnBehalfOfAuthenticationProvider.Init(PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationCredentialConfigurationOptions)">
+            <summary>
+            Initializes the Authentication Provider
+            </summary>
+            <param name="options">The options to use</param>
+        </member>
+        <member name="M:PnP.Core.Auth.OnBehalfOfAuthenticationProvider.AuthenticateRequestAsync(System.Uri,System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Authenticates the specified request message.
+            </summary>
+            <param name="resource">Request uri</param>
+            <param name="request">The <see cref="T:System.Net.Http.HttpRequestMessage"/> to authenticate.</param>
+            <returns>The task to await.</returns>
+        </member>
+        <member name="M:PnP.Core.Auth.OnBehalfOfAuthenticationProvider.GetAccessTokenAsync(System.Uri,System.String[])">
+            <summary>
+            Gets an access token for the requested resource and scope
+            </summary>
+            <param name="resource">Resource to request an access token for (unused)</param>
+            <param name="scopes">Scopes to request</param>
+            <returns>An access token</returns>
+        </member>
+        <member name="M:PnP.Core.Auth.OnBehalfOfAuthenticationProvider.GetAccessTokenAsync(System.Uri)">
+            <summary>
+            Gets an access token for the requested resource 
+            </summary>
+            <param name="resource">Resource to request an access token for</param>
+            <returns>An access token</returns>
+        </member>
+        <member name="T:PnP.Core.Auth.X509CertificateAuthenticationProvider">
+            <summary>
+            Authentication Provider based on the X.509 Certificate
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.X509CertificateAuthenticationProvider.Certificate">
+            <summary>
+            The X.509 Certificate to use for app authentication
+            </summary>
+        </member>
+        <member name="M:PnP.Core.Auth.X509CertificateAuthenticationProvider.#ctor(System.String,System.String,System.Security.Cryptography.X509Certificates.StoreName,System.Security.Cryptography.X509Certificates.StoreLocation,System.String)">
+            <summary>
+            Public constructor for external consumers of the library
+            </summary>
+            <param name="clientId">The Client ID for the Authentication Provider</param>
+            <param name="tenantId">The Tenant ID for the Authentication Provider</param>
+            <param name="storeName">The Store Name to get the X.509 certificate from</param>
+            <param name="storeLocation">The Store Location to get the X.509 certificate from</param>
+            <param name="thumbprint">The Thumbprint of the X.509 certificate</param>
+        </member>
+        <member name="M:PnP.Core.Auth.X509CertificateAuthenticationProvider.#ctor(System.String,System.String,System.Security.Cryptography.X509Certificates.X509Certificate2)">
+            <summary>
+            Public constructor for external consumers of the library
+            </summary>
+            <param name="clientId">The Client ID for the Authentication Provider</param>
+            <param name="tenantId">The Tenant ID for the Authentication Provider</param>
+            <param name="certificate">The X.509 certificate to use for authentication</param>
+        </member>
+        <member name="M:PnP.Core.Auth.X509CertificateAuthenticationProvider.#ctor(System.String,System.String,PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationX509CertificateOptions)">
+            <summary>
+            Public constructor for external consumers of the library
+            </summary>
+            <param name="clientId">The Client ID for the Authentication Provider</param>
+            <param name="tenantId">The Tenant ID for the Authentication Provider</param>
+            <param name="options">Options for the authentication provider</param>
+        </member>
+        <member name="M:PnP.Core.Auth.X509CertificateAuthenticationProvider.#ctor(Microsoft.Extensions.Logging.ILogger{PnP.Core.Auth.OAuthAuthenticationProvider},Microsoft.Identity.Client.IMsalHttpClientFactory)">
+            <summary>
+            Public constructor leveraging DI to initialize the ILogger and IMsalHttpClientFactory interfaces
+            </summary>
+            <param name="logger">The instance of the logger service provided by DI</param>
+            <param name="msalHttpClientFactory">The instance of the Msal Http Client Factory service provided by DI</param>
+        </member>
+        <member name="M:PnP.Core.Auth.X509CertificateAuthenticationProvider.Init(PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationCredentialConfigurationOptions)">
+            <summary>
+            Initializes the X509Certificate Authentication Provider
+            </summary>
+            <param name="options">The options to use</param>
+        </member>
+        <member name="M:PnP.Core.Auth.X509CertificateAuthenticationProvider.AuthenticateRequestAsync(System.Uri,System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Authenticates the specified request message.
+            </summary>
+            <param name="resource">Request uri</param>
+            <param name="request">The <see cref="T:System.Net.Http.HttpRequestMessage"/> to authenticate.</param>
+            <returns>The task to await.</returns>
+        </member>
+        <member name="M:PnP.Core.Auth.X509CertificateAuthenticationProvider.GetAccessTokenAsync(System.Uri,System.String[])">
+            <summary>
+            Gets an access token for the requested resource and scope
+            </summary>
+            <param name="resource">Resource to request an access token for (unused)</param>
+            <param name="scopes">Scopes to request</param>
+            <returns>An access token</returns>
+        </member>
+        <member name="M:PnP.Core.Auth.X509CertificateAuthenticationProvider.GetAccessTokenAsync(System.Uri)">
+            <summary>
+            Gets an access token for the requested resource 
+            </summary>
+            <param name="resource">Resource to request an access token for</param>
+            <returns>An access token</returns>
+        </member>
+        <member name="T:PnP.Core.Auth.OAuthAuthenticationProvider">
+            <summary>
+            Base authentication provider class
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.OAuthAuthenticationProvider.ConfigurationName">
+            <summary>
+            The Name of the configuration for the Authentication Provider
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.OAuthAuthenticationProvider.ClientId">
+            <summary>
+            The ClientId of the application to use for authentication
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.OAuthAuthenticationProvider.TenantId">
+            <summary>
+            The Tenant ID for the application, default value is "organizations" for multi-tenant applications
+            </summary>
+        </member>
+        <member name="F:PnP.Core.Auth.OAuthAuthenticationProvider.Log">
+            <summary>
+            Local copy of the logger class
+            </summary>
+        </member>
+        <member name="M:PnP.Core.Auth.OAuthAuthenticationProvider.#ctor(Microsoft.Extensions.Logging.ILogger{PnP.Core.Auth.OAuthAuthenticationProvider})">
+            <summary>
+            Public constructor for any OAuth Authentication privider
+            </summary>
+            <param name="logger"></param>
+        </member>
+        <member name="M:PnP.Core.Auth.OAuthAuthenticationProvider.Init(PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationCredentialConfigurationOptions)">
+            <summary>
+            Initializes the Authentication Provider
+            </summary>
+        </member>
+        <member name="M:PnP.Core.Auth.OAuthAuthenticationProvider.AuthenticateRequestAsync(System.Uri,System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Authenticates the specified request message.
+            </summary>
+            <param name="resource">Request uri</param>
+            <param name="request">The <see cref="T:System.Net.Http.HttpRequestMessage"/> to authenticate.</param>
+            <returns>The task to await.</returns>
+        </member>
+        <member name="M:PnP.Core.Auth.OAuthAuthenticationProvider.GetAccessTokenAsync(System.Uri,System.String[])">
+            <summary>
+            Gets an access token for the requested resource and scope
+            </summary>
+            <param name="resource">Resource to request an access token for</param>
+            <param name="scopes">Scopes to request</param>
+            <returns>An access token</returns>
+        </member>
+        <member name="M:PnP.Core.Auth.OAuthAuthenticationProvider.GetAccessTokenAsync(System.Uri)">
+            <summary>
+            Gets an access token for the requested resource 
+            </summary>
+            <param name="resource">Resource to request an access token for</param>
+            <returns>An access token</returns>
+        </member>
+        <member name="T:PnP.Core.Auth.ExternalAuthenticationProvider">
+            <summary>
+            Authentication Provider that relies on an external token provider 
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.ExternalAuthenticationProvider.AccessTokenProvider">
+            <summary>
+            A function providing the access token to use
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.ExternalAuthenticationProvider.AccessTokenTaskProvider">
+            <summary>
+            A function providing the access token to use
+            </summary>
+        </member>
+        <member name="M:PnP.Core.Auth.ExternalAuthenticationProvider.#ctor(System.Func{System.Uri,System.String[],System.String})">
+            <summary>
+            Public constructor for external consumers of the library
+            </summary>
+            <param name="accessTokenProvider">A function providing the access token to use</param>
+        </member>
+        <member name="M:PnP.Core.Auth.ExternalAuthenticationProvider.#ctor(System.Func{System.Uri,System.String[],System.Threading.Tasks.Task{System.String}})">
+            <summary>
+            Public constructor for external consumers of the library
+            </summary>
+            <param name="accessTokenProvider">A function providing the access token to use</param>
+        </member>
+        <member name="M:PnP.Core.Auth.ExternalAuthenticationProvider.#ctor(Microsoft.Extensions.Logging.ILogger{PnP.Core.Auth.OAuthAuthenticationProvider})">
+            <summary>
+            Public constructor leveraging DI to initialize the ILogger interfafce
+            </summary>
+            <param name="logger">The instance of the logger service provided by DI</param>
+        </member>
+        <member name="M:PnP.Core.Auth.ExternalAuthenticationProvider.Init(PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationCredentialConfigurationOptions)">
+            <summary>
+            Initializes the Authentication Provider
+            </summary>
+            <param name="options">The options to use</param>
+        </member>
+        <member name="M:PnP.Core.Auth.ExternalAuthenticationProvider.AuthenticateRequestAsync(System.Uri,System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Authenticates the specified request message.
+            </summary>
+            <param name="resource">Request uri</param>
+            <param name="request">The <see cref="T:System.Net.Http.HttpRequestMessage"/> to authenticate.</param>
+            <returns>The task to await.</returns>
+        </member>
+        <member name="M:PnP.Core.Auth.ExternalAuthenticationProvider.GetAccessTokenAsync(System.Uri,System.String[])">
+            <summary>
+            Gets an access token for the requested resource and scope
+            </summary>
+            <param name="resource">Resource to request an access token for</param>
+            <param name="scopes">Scopes to request</param>
+            <returns>An access token</returns>
+        </member>
+        <member name="M:PnP.Core.Auth.ExternalAuthenticationProvider.GetAccessTokenAsync(System.Uri)">
+            <summary>
+            Gets an access token for the requested resource 
+            </summary>
+            <param name="resource">Resource to request an access token for</param>
+            <returns>An access token</returns>
+        </member>
+        <member name="T:PnP.Core.Auth.PnPCoreAuthResources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.PnPCoreAuthResources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.PnPCoreAuthResources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.PnPCoreAuthResources.AspNetCoreAuthenticationProvider_InvalidConfiguration">
+            <summary>
+              Looks up a localized string similar to Invalid configuration for AspNetCoreAuthenticationProvider.
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.PnPCoreAuthResources.AspNetCoreAuthenticationProvider_LogInit">
+            <summary>
+              Looks up a localized string similar to Initialized AspNetCoreAuthenticationProvider.
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.PnPCoreAuthResources.AuthenticationProvider_LogAccessTokenRetrieval">
+            <summary>
+              Looks up a localized string similar to Retrieved access token for resource {1} with scopes &apos;{2}&apos; from {0}.
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.PnPCoreAuthResources.CredentialManagerAuthenticationProvider_CredentialManagerEntryDoesNotExist">
+            <summary>
+              Looks up a localized string similar to The provided credential manager entry &apos;{0}&apos; does not exist in the system&apos;s credential manager.
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.PnPCoreAuthResources.CredentialManagerAuthenticationProvider_InvalidConfiguration">
+            <summary>
+              Looks up a localized string similar to Invalid configuration for CredentialManagerAuthenticationProvider.
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.PnPCoreAuthResources.CredentialManagerAuthenticationProvider_InvalidCredentialManagerName">
+            <summary>
+              Looks up a localized string similar to Invalid or missing value for CredentialManagerName in CredentialManagerAuthenticationProvider configuration.
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.PnPCoreAuthResources.CredentialManagerAuthenticationProvider_LogInit">
+            <summary>
+              Looks up a localized string similar to Initialized CredentialManagerAuthenticationProvider with credential manager item name {0}.
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.PnPCoreAuthResources.DeviceCodeAuthenticationProvider_InvalidConfiguration">
+            <summary>
+              Looks up a localized string similar to Invalid configuration for DeviceCodeAuthenticationProvider.
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.PnPCoreAuthResources.DeviceCodeAuthenticationProvider_LogInit">
+            <summary>
+              Looks up a localized string similar to Initialized DeviceCodeAuthenticationProvider.
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.PnPCoreAuthResources.DeviceCodeAuthenticationProvider_MissingDeviceCodeVerification">
+            <summary>
+              Looks up a localized string similar to Missing value for function DeviceCodeVerification in DeviceCodeAuthenticationProvider.
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.PnPCoreAuthResources.Exception_MissingDefaultAuthenticationProvider">
+            <summary>
+              Looks up a localized string similar to Missing default configuration for Authentication Provider Factory.
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.PnPCoreAuthResources.ExternalAuthenticationProvider_LogInit">
+            <summary>
+              Looks up a localized string similar to Initialized ExternalAuthenticationProvider.
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.PnPCoreAuthResources.ExternalAuthenticationProvider_MissingAccessTokenProvider">
+            <summary>
+              Looks up a localized string similar to Missing value for function AccessTokenProvider in ExternalAuthenticationProvider.
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.PnPCoreAuthResources.InteractiveAuthenticationProvider_InvalidConfiguration">
+            <summary>
+              Looks up a localized string similar to Invalid configuration for InteractiveAuthenticationProvider.
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.PnPCoreAuthResources.InteractiveAuthenticationProvider_LogInit">
+            <summary>
+              Looks up a localized string similar to Initialized InteractiveAuthenticationProvider.
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.PnPCoreAuthResources.InvalidClientId">
+            <summary>
+              Looks up a localized string similar to Missing ClientId value.
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.PnPCoreAuthResources.InvalidConfigurationName">
+            <summary>
+              Looks up a localized string similar to Invalid configuration name &apos;{0}&apos; for IAuthenticationProvider creation!.
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.PnPCoreAuthResources.OnBehalfOfAuthenticationProvider_InvalidClientSecretOrCertificate">
+            <summary>
+              Looks up a localized string similar to Invalid or missing value for ClientSecret or Certificate in OnBehalfOfAuthenticationProvider configuration.
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.PnPCoreAuthResources.OnBehalfOfAuthenticationProvider_InvalidConfiguration">
+            <summary>
+              Looks up a localized string similar to Invalid configuration for OnBehalfOfAuthenticationProvider.
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.PnPCoreAuthResources.OnBehalfOfAuthenticationProvider_LogInit">
+            <summary>
+              Looks up a localized string similar to Initialized OnBehalfOfAuthenticationProvider.
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.PnPCoreAuthResources.OnBehalfOfAuthenticationProvider_MissingUserTokenProvider">
+            <summary>
+              Looks up a localized string similar to Missing value for function UserTokenProvider in OnBehalfOfAuthenticationProvider.
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.PnPCoreAuthResources.UsernamePasswordAuthenticationProvider_InvalidConfiguration">
+            <summary>
+              Looks up a localized string similar to Invalid configuration for UsernamePasswordAuthenticationProvider.
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.PnPCoreAuthResources.UsernamePasswordAuthenticationProvider_InvalidPassword">
+            <summary>
+              Looks up a localized string similar to Invalid or missing value for Password in UsernamePasswordAuthenticationProvider configuration.
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.PnPCoreAuthResources.UsernamePasswordAuthenticationProvider_InvalidUsername">
+            <summary>
+              Looks up a localized string similar to Invalid or missing value for Username in UsernamePasswordAuthenticationProvider configuration.
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.PnPCoreAuthResources.UsernamePasswordAuthenticationProvider_LogInit">
+            <summary>
+              Looks up a localized string similar to Initialized UsernamePasswordAuthenticationProvider with username {0}.
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.PnPCoreAuthResources.X509CertificateAuthenticationProvider_InvalidCertificate">
+            <summary>
+              Looks up a localized string similar to Cannot find the certificate with thumbprint &apos;{0}&apos; in store &apos;{1}&apos; with store location &apos;{2}&apos; while parsing X509CertificateAuthenticationProvider configuration.
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.PnPCoreAuthResources.X509CertificateAuthenticationProvider_InvalidCertificateOrThumbprint">
+            <summary>
+              Looks up a localized string similar to Invalid or missing value for certificate Thumbprint or Certificate in X509CertificateAuthenticationProvider configuration.
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.PnPCoreAuthResources.X509CertificateAuthenticationProvider_InvalidConfiguration">
+            <summary>
+              Looks up a localized string similar to Invalid configuration for X509CertificateAuthenticationProvider.
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.PnPCoreAuthResources.X509CertificateAuthenticationProvider_LogInit">
+            <summary>
+              Looks up a localized string similar to Initialized X509CertificateAuthenticationProvider with certificate with thumbprint {0} from store {1} location {2}.
+            </summary>
+        </member>
+        <member name="T:PnP.Core.Auth.CredentialManagerAuthenticationProvider">
+            <summary>
+            Authentication Provider that uses a set of credentials stored in the Credentials Manager of Windows
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.CredentialManagerAuthenticationProvider.CredentialManagerName">
+            <summary>
+            The name of the Windows Credential Manager settings to use
+            </summary>
+        </member>
+        <member name="M:PnP.Core.Auth.CredentialManagerAuthenticationProvider.#ctor(System.String,System.String,PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationCredentialManagerOptions)">
+            <summary>
+            Public constructor for external consumers of the library
+            </summary>
+            <param name="clientId">The Client ID for the Authentication Provider</param>
+            <param name="tenantId">The Tenant ID for the Authentication Provider</param>
+            <param name="options">Options for the authentication provider</param>
+        </member>
+        <member name="M:PnP.Core.Auth.CredentialManagerAuthenticationProvider.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Public constructor for external consumers of the library
+            </summary>
+            <param name="clientId">The Client ID for the Authentication Provider</param>
+            <param name="tenantId">The Tenant ID for the Authentication Provider</param>
+            <param name="credentialManagerName">The Name of the Credential Manager item for authentication</param>
+        </member>
+        <member name="M:PnP.Core.Auth.CredentialManagerAuthenticationProvider.#ctor(Microsoft.Extensions.Logging.ILogger{PnP.Core.Auth.OAuthAuthenticationProvider},Microsoft.Identity.Client.IMsalHttpClientFactory)">
+            <summary>
+            Public constructor leveraging DI to initialize the ILogger and IMsalHttpClientFactory interfaces
+            </summary>
+            <param name="logger">The instance of the logger service provided by DI</param>
+            <param name="msalHttpClientFactory">The instance of the Msal Http Client Factory service provided by DI</param>
+        </member>
+        <member name="M:PnP.Core.Auth.CredentialManagerAuthenticationProvider.Init(PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationCredentialConfigurationOptions)">
+            <summary>
+            Initializes the Authentication Provider
+            </summary>
+            <param name="options">The options to use</param>
+        </member>
+        <member name="M:PnP.Core.Auth.CredentialManagerAuthenticationProvider.AuthenticateRequestAsync(System.Uri,System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Authenticates the specified request message.
+            </summary>
+            <param name="resource">Request uri</param>
+            <param name="request">The <see cref="T:System.Net.Http.HttpRequestMessage"/> to authenticate.</param>
+            <returns>The task to await.</returns>
+        </member>
+        <member name="M:PnP.Core.Auth.CredentialManagerAuthenticationProvider.GetAccessTokenAsync(System.Uri,System.String[])">
+            <summary>
+            Gets an access token for the requested resource and scope. Provide either scopes or resource parameter.
+            </summary>
+            <param name="resource">Resource to request an access token for, only used if scopes is null</param>
+            <param name="scopes">Scopes to request, can be null</param>
+            <returns>An access token</returns>
+        </member>
+        <member name="M:PnP.Core.Auth.CredentialManagerAuthenticationProvider.GetAccessTokenAsync(System.Uri)">
+            <summary>
+            Gets an access token for the requested resource 
+            </summary>
+            <param name="resource">Resource to request an access token for</param>
+            <returns>An access token</returns>
+        </member>
+        <member name="T:PnP.Core.Auth.DeviceCodeAuthenticationProvider">
+            <summary>
+            Authentication Provider that uses a device code flow for authentication
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.DeviceCodeAuthenticationProvider.RedirectUri">
+            <summary>
+            The Redirect URI for the authentication flow
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.DeviceCodeAuthenticationProvider.DeviceCodeVerification">
+            <summary>
+            Action to notify the end user about the device code request
+            </summary>
+        </member>
+        <member name="M:PnP.Core.Auth.DeviceCodeAuthenticationProvider.#ctor(System.String,System.String,System.Uri,System.Action{PnP.Core.Auth.DeviceCodeNotification})">
+            <summary>
+            Public constructor for external consumers of the library
+            </summary>
+            <param name="clientId">The Client ID for the Authentication Provider</param>
+            <param name="tenantId">The Tenant ID for the Authentication Provider</param>
+            <param name="redirectUri">The Redirect URI for the authentication flow</param>
+            <param name="deviceCodeVerification">External action to manage the Device Code verification</param>
+        </member>
+        <member name="M:PnP.Core.Auth.DeviceCodeAuthenticationProvider.#ctor(System.String,System.String,PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationDeviceCodeOptions,System.Action{PnP.Core.Auth.DeviceCodeNotification})">
+            <summary>
+            Public constructor for external consumers of the library
+            </summary>
+            <param name="clientId">The Client ID for the Authentication Provider</param>
+            <param name="tenantId">The Tenant ID for the Authentication Provider</param>
+            <param name="options">Options for the authentication provider</param>
+            <param name="deviceCodeVerification">External action to manage the Device Code verification</param>
+        </member>
+        <member name="M:PnP.Core.Auth.DeviceCodeAuthenticationProvider.#ctor(Microsoft.Extensions.Logging.ILogger{PnP.Core.Auth.OAuthAuthenticationProvider},Microsoft.Identity.Client.IMsalHttpClientFactory)">
+            <summary>
+            Public constructor leveraging DI to initialize the ILogger and IMsalHttpClientFactory interfaces
+            </summary>
+            <param name="logger">The instance of the logger service provided by DI</param>
+            <param name="msalHttpClientFactory">The instance of the Msal Http Client Factory service provided by DI</param>
+        </member>
+        <member name="M:PnP.Core.Auth.DeviceCodeAuthenticationProvider.Init(PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationCredentialConfigurationOptions)">
+            <summary>
+            Initializes the Authentication Provider
+            </summary>
+            <param name="options">The options to use</param>
+        </member>
+        <member name="M:PnP.Core.Auth.DeviceCodeAuthenticationProvider.AuthenticateRequestAsync(System.Uri,System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Authenticates the specified request message.
+            </summary>
+            <param name="resource">Request uri</param>
+            <param name="request">The <see cref="T:System.Net.Http.HttpRequestMessage"/> to authenticate.</param>
+            <returns>The task to await.</returns>
+        </member>
+        <member name="M:PnP.Core.Auth.DeviceCodeAuthenticationProvider.GetAccessTokenAsync(System.Uri,System.String[])">
+            <summary>
+            Gets an access token for the requested resource and scope
+            </summary>
+            <param name="resource">Resource to request an access token for (unused)</param>
+            <param name="scopes">Scopes to request</param>
+            <returns>An access token</returns>
+        </member>
+        <member name="M:PnP.Core.Auth.DeviceCodeAuthenticationProvider.GetAccessTokenAsync(System.Uri)">
+            <summary>
+            Gets an access token for the requested resource 
+            </summary>
+            <param name="resource">Resource to request an access token for</param>
+            <returns>An access token</returns>
+        </member>
+        <member name="T:PnP.Core.Auth.DeviceCodeNotification">
+            <summary>
+            Provides information about the Device Code authentication request
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.DeviceCodeNotification.Message">
+            <summary>
+            User friendly text response that can be used for display purpose.
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.DeviceCodeNotification.VerificationUrl">
+            <summary>
+            Verification URL where the user must navigate to authenticate using the device code and credentials
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.DeviceCodeNotification.UserCode">
+            <summary>
+            Device code returned by the service
+            </summary>
+        </member>
+        <member name="T:PnP.Core.Auth.InteractiveAuthenticationProvider">
+            <summary>
+            Authentication Provider that uses an interactive flow prompting the user for credentials
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.InteractiveAuthenticationProvider.RedirectUri">
+            <summary>
+            The Redirect URI for the authentication flow
+            </summary>
+        </member>
+        <member name="M:PnP.Core.Auth.InteractiveAuthenticationProvider.#ctor(System.String,System.String,System.Uri)">
+            <summary>
+            Public constructor for external consumers of the library
+            </summary>
+            <param name="clientId">The Client ID for the Authentication Provider</param>
+            <param name="tenantId">The Tenant ID for the Authentication Provider</param>
+            <param name="redirectUri">The Redirect URI for the authentication flow</param>
+        </member>
+        <member name="M:PnP.Core.Auth.InteractiveAuthenticationProvider.#ctor(System.String,System.String,PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationInteractiveOptions)">
+            <summary>
+            Public constructor for external consumers of the library
+            </summary>
+            <param name="clientId">The Client ID for the Authentication Provider</param>
+            <param name="tenantId">The Tenant ID for the Authentication Provider</param>
+            <param name="options">Options for the authentication provider</param>
+        </member>
+        <member name="M:PnP.Core.Auth.InteractiveAuthenticationProvider.#ctor">
+            <summary>
+            Public constructor for external consumers of the library
+            </summary>
+        </member>
+        <member name="M:PnP.Core.Auth.InteractiveAuthenticationProvider.#ctor(Microsoft.Extensions.Logging.ILogger{PnP.Core.Auth.OAuthAuthenticationProvider},Microsoft.Identity.Client.IMsalHttpClientFactory)">
+            <summary>
+            Public constructor leveraging DI to initialize the ILogger and IMsalHttpClientFactory interfaces
+            </summary>
+            <param name="logger">The instance of the logger service provided by DI</param>
+            <param name="msalHttpClientFactory">The instance of the Msal Http Client Factory service provided by DI</param>
+        </member>
+        <member name="M:PnP.Core.Auth.InteractiveAuthenticationProvider.Init(PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationCredentialConfigurationOptions)">
+            <summary>
+            Initializes the Authentication Provider
+            </summary>
+            <param name="options">The options to use</param>
+        </member>
+        <member name="M:PnP.Core.Auth.InteractiveAuthenticationProvider.AuthenticateRequestAsync(System.Uri,System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Authenticates the specified request message.
+            </summary>
+            <param name="resource">Request uri</param>
+            <param name="request">The <see cref="T:System.Net.Http.HttpRequestMessage"/> to authenticate.</param>
+            <returns>The task to await.</returns>
+        </member>
+        <member name="M:PnP.Core.Auth.InteractiveAuthenticationProvider.GetAccessTokenAsync(System.Uri,System.String[])">
+            <summary>
+            Gets an access token for the requested resource and scope
+            </summary>
+            <param name="resource">Resource to request an access token for (unused)</param>
+            <param name="scopes">Scopes to request</param>
+            <returns>An access token</returns>
+        </member>
+        <member name="M:PnP.Core.Auth.InteractiveAuthenticationProvider.GetAccessTokenAsync(System.Uri)">
+            <summary>
+            Gets an access token for the requested resource 
+            </summary>
+            <param name="resource">Resource to request an access token for</param>
+            <returns>An access token</returns>
+        </member>
+        <member name="T:PnP.Core.Auth.UsernamePasswordAuthenticationProvider">
+            <summary>
+            Authentication Provider that uses a Resource Owner Password Credentials (ROCP) credential flow
+            </summary>
+            <remarks>
+            You can find further details about ROPC here: https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth-ropc
+            </remarks>
+        </member>
+        <member name="P:PnP.Core.Auth.UsernamePasswordAuthenticationProvider.Username">
+            <summary>
+            The username for authenticating
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.UsernamePasswordAuthenticationProvider.Password">
+            <summary>
+            The password for authenticating
+            </summary>
+        </member>
+        <member name="M:PnP.Core.Auth.UsernamePasswordAuthenticationProvider.#ctor(System.String,System.String,System.String,System.Security.SecureString)">
+            <summary>
+            Public constructor for external consumers of the library
+            </summary>
+            <param name="clientId">The Client ID for the Authentication Provider</param>
+            <param name="tenantId">The Tenant ID for the Authentication Provider</param>
+            <param name="username">The Username for authentication</param>
+            <param name="password">The Password for authentication</param>
+        </member>
+        <member name="M:PnP.Core.Auth.UsernamePasswordAuthenticationProvider.#ctor(System.String,System.String,PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationUsernamePasswordOptions)">
+            <summary>
+            Public constructor for external consumers of the library
+            </summary>
+            <param name="clientId">The Client ID for the Authentication Provider</param>
+            <param name="tenantId">The Tenant ID for the Authentication Provider</param>
+            <param name="options">Options for the authentication provider</param>
+        </member>
+        <member name="M:PnP.Core.Auth.UsernamePasswordAuthenticationProvider.#ctor(Microsoft.Extensions.Logging.ILogger{PnP.Core.Auth.OAuthAuthenticationProvider},Microsoft.Identity.Client.IMsalHttpClientFactory)">
+            <summary>
+            Public constructor leveraging DI to initialize the ILogger and IMsalHttpClientFactory interfaces
+            </summary>
+            <param name="logger">The instance of the logger service provided by DI</param>
+            <param name="msalHttpClientFactory">The instance of the Msal Http Client Factory service provided by DI</param>
+        </member>
+        <member name="M:PnP.Core.Auth.UsernamePasswordAuthenticationProvider.Init(PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationCredentialConfigurationOptions)">
+            <summary>
+            Initializes the Authentication Provider
+            </summary>
+            <param name="options">The options to use</param>
+        </member>
+        <member name="M:PnP.Core.Auth.UsernamePasswordAuthenticationProvider.AuthenticateRequestAsync(System.Uri,System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Authenticates the specified request message.
+            </summary>
+            <param name="resource">Request uri</param>
+            <param name="request">The <see cref="T:System.Net.Http.HttpRequestMessage"/> to authenticate.</param>
+            <returns>The task to await.</returns>
+        </member>
+        <member name="M:PnP.Core.Auth.UsernamePasswordAuthenticationProvider.GetAccessTokenAsync(System.Uri,System.String[])">
+            <summary>
+            Gets an access token for the requested resource and scope
+            </summary>
+            <param name="resource">Resource to request an access token for (unused)</param>
+            <param name="scopes">Scopes to request</param>
+            <returns>An access token</returns>
+        </member>
+        <member name="M:PnP.Core.Auth.UsernamePasswordAuthenticationProvider.GetAccessTokenAsync(System.Uri)">
+            <summary>
+            Gets an access token for the requested resource 
+            </summary>
+            <param name="resource">Resource to request an access token for</param>
+            <returns>An access token</returns>
+        </member>
+        <member name="T:PnP.Core.Auth.Services.AuthenticationProviderFactory">
+            <summary>
+            Public factory service to create IAuthenticationProvider object instances
+            </summary>
+        </member>
+        <member name="M:PnP.Core.Auth.Services.AuthenticationProviderFactory.#ctor(Microsoft.Extensions.Options.IOptionsMonitor{PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationOptions},Microsoft.Extensions.Logging.ILogger{PnP.Core.Services.PnPContext},System.IServiceProvider)">
+            <summary>
+            <see cref="T:PnP.Core.Auth.Services.AuthenticationProviderFactory"/> constructor
+            </summary>
+            <param name="options">Options to configure the <see cref="T:PnP.Core.Auth.Services.AuthenticationProviderFactory"/></param>
+            <param name="logger">Logger for log output</param>
+            <param name="serviceProvider">DI container service</param>
+        </member>
+        <member name="M:PnP.Core.Auth.Services.AuthenticationProviderFactory.CreateDefault">
+            <summary>
+            Creates the default instance of IAuthenticationProvider based on the configuration
+            </summary>
+            <returns>An object that implements IAuthenticationProvider based on the configuration</returns>
+        </member>
+        <member name="M:PnP.Core.Auth.Services.AuthenticationProviderFactory.Create(System.String)">
+            <summary>
+            Creates a new instance of IAuthenticationProvider based on a provided configuration name
+            </summary>
+            <param name="name">The name of the IAuthenticationProvider configuration to use</param>
+            <returns>An object that implements IAuthenticationProvider based on the provided configuration name</returns>
+        </member>
+        <member name="M:PnP.Core.Auth.Services.AuthenticationProviderFactory.ResolveAuthenticationProviderType(PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationCredentialConfigurationOptions)">
+            <summary>
+            Resolves the type of the Authentication Provider to create
+            </summary>
+            <param name="option">The configuration options for the target Authentication Provider</param>
+            <returns>The type of the target Authentication Provider</returns>
+        </member>
+        <member name="T:PnP.Core.Auth.Services.Builder.Configuration.AuthenticationProvidersOptionsConfigurator">
+            <summary>
+            Handles the configuration of PnPCoreOptions based on the AuthenticationOptions settings
+            </summary>
+        </member>
+        <member name="M:PnP.Core.Auth.Services.Builder.Configuration.AuthenticationProvidersOptionsConfigurator.#ctor(Microsoft.Extensions.Options.IOptions{PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationOptions},PnP.Core.Auth.Services.IAuthenticationProviderFactory)">
+            <summary>
+            Default constructor
+            </summary>
+            <param name="authenticationOptions"><see cref="T:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationOptions"/> authentication options</param>
+            <param name="authenticationProviderFactory">Authentication factory</param>
+        </member>
+        <member name="M:PnP.Core.Auth.Services.Builder.Configuration.AuthenticationProvidersOptionsConfigurator.Configure(PnP.Core.Services.Builder.Configuration.PnPCoreOptions)">
+            <summary>
+            Process the <see cref="T:PnP.Core.Services.Builder.Configuration.PnPCoreOptions"/> options
+            </summary>
+            <param name="options"></param>
+        </member>
+        <member name="T:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationOptions">
+            <summary>
+            Options for configuring the PnP Core SDK Authentication Providers
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationOptions.Environment">
+            <summary>
+            The Microsoft 365 cloud environment that's used
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationOptions.AzureADLoginAuthority">
+            <summary>
+            Returns the Azure AD Login authority (e.g. login.microsoftonline.com) to use when <see cref="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationOptions.Environment"/> is set to <see cref="F:PnP.Core.Services.Microsoft365Environment.Custom"/>
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationOptions.Sites">
+            <summary>
+            The sites options
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationOptions.Credentials">
+            <summary>
+            The credential options
+            </summary>
+        </member>
+        <member name="T:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationSitesOptions">
+            <summary>
+            Options for configuring PnP Core SDK
+            </summary>
+        </member>
+        <member name="T:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationSiteOptions">
+            <summary>
+            Options for configuring a single site in PnP Core SDK
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationSiteOptions.AuthenticationProviderName">
+            <summary>
+            The Authentication Provider name
+            </summary>
+        </member>
+        <member name="T:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationCredentialsOptions">
+            <summary>
+            Defines a collection of credential settings for secure connections to the target resources
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationCredentialsOptions.DefaultConfiguration">
+            <summary>
+            Defines the name of the default configuration
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationCredentialsOptions.Configurations">
+            <summary>
+            The credentials options
+            </summary>
+        </member>
+        <member name="T:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationCredentialsConfigurationsOptions">
+            <summary>
+            Options for configuring PnP Core SDK
+            </summary>
+        </member>
+        <member name="T:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationCredentialConfigurationOptions">
+            <summary>
+            Options for one configured credentials
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationCredentialConfigurationOptions.ClientId">
+            <summary>
+            The ClientId of the application to use for authentication
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationCredentialConfigurationOptions.TenantId">
+            <summary>
+            The Tenant ID for the application, can be null
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationCredentialConfigurationOptions.Environment">
+            <summary>
+            The Microsoft 365 cloud environment that's used
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationCredentialConfigurationOptions.AzureADLoginAuthority">
+            <summary>
+            Returns the Azure AD Login authority (e.g. login.microsoftonline.com) to use when <see cref="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationCredentialConfigurationOptions.Environment"/> is set to <see cref="F:PnP.Core.Services.Microsoft365Environment.Custom"/>
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationCredentialConfigurationOptions.X509Certificate">
+            <summary>
+            The options for the X509 Certificate Authentication Provider
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationCredentialConfigurationOptions.CredentialManager">
+            <summary>
+            The options for the Credential Manager Authentication Provider
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationCredentialConfigurationOptions.OnBehalfOf">
+            <summary>
+            The options for the On Behalf Of Authentication Provider
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationCredentialConfigurationOptions.UsernamePassword">
+            <summary>
+            The options for the Username and Password Authentication Provider
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationCredentialConfigurationOptions.Interactive">
+            <summary>
+            The options for the Interactive Authentication Provider
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationCredentialConfigurationOptions.DeviceCode">
+            <summary>
+            The options for the Device Code Provider
+            </summary>
+        </member>
+        <member name="T:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationX509CertificateOptions">
+            <summary>
+            Options for the X509CertificateAuthenticationProvider
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationX509CertificateOptions.StoreName">
+            <summary>
+            The name of the certificate store
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationX509CertificateOptions.StoreLocation">
+            <summary>
+            The location in the certificate store
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationX509CertificateOptions.Thumbprint">
+            <summary>
+            The thumbprint of the certificate
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationX509CertificateOptions.Certificate">
+            <summary>
+            Certificate can be set directly, if required
+            </summary>
+        </member>
+        <member name="T:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationCredentialManagerOptions">
+            <summary>
+            Options for the CredentialManagerAuthenticationProvider
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationCredentialManagerOptions.CredentialManagerName">
+            <summary>
+            The name of the Windows Credential Manager settings to use
+            </summary>
+        </member>
+        <member name="T:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationOnBehalfOfOptions">
+            <summary>
+            Options for the OnBehalfOfAuthenticationProvider
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationOnBehalfOfOptions.ClientSecret">
+            <summary>
+            The ClientSecret to authenticate the app with ClientId
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationOnBehalfOfOptions.StoreName">
+            <summary>
+            The name of the certificate store
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationOnBehalfOfOptions.StoreLocation">
+            <summary>
+            The location in the certificate store
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationOnBehalfOfOptions.Thumbprint">
+            <summary>
+            The thumbprint of the certificate
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationOnBehalfOfOptions.Certificate">
+            <summary>
+            Certificate can be set directly, if required
+            </summary>
+        </member>
+        <member name="T:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationUsernamePasswordOptions">
+            <summary>
+            Options for the UsernamePasswordAuthenticationProvider
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationUsernamePasswordOptions.Username">
+            <summary>
+            The username for authentication
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationUsernamePasswordOptions.Password">
+            <summary>
+            The password for authentication
+            </summary>
+        </member>
+        <member name="T:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationInteractiveOptions">
+            <summary>
+            Options for the InteractiveAuthenticationProvider
+            </summary>
+        </member>
+        <member name="T:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationDeviceCodeOptions">
+            <summary>
+            Options for the DeviceCodeAuthenticationProvider
+            </summary>
+        </member>
+        <member name="T:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationBaseOptions">
+            <summary>
+            Options for the DeviceCodeAuthenticationProvider
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationBaseOptions.RedirectUri">
+            <summary>
+            The Redirect URI for the authentication flow
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationBaseOptions.AuthorityUri">
+            <summary>
+            The Authority URI for the authentication flow
+            </summary>
+        </member>
+        <member name="T:PnP.Core.Auth.Services.Http.MsalHttpClientFactory">
+            <summary>
+            Factory responsible for creating HttpClient as .NET recommends to use a single instance of HttpClient.
+            </summary>
+        </member>
+        <member name="M:PnP.Core.Auth.Services.Http.MsalHttpClientFactory.#ctor(System.Net.Http.IHttpClientFactory)">
+            <summary>
+            Default Constructor 
+            </summary>
+            <param name="httpClientFactory">Client factory that will handle the <see cref="T:System.Net.Http.HttpClient"/> creation</param>
+        </member>
+        <member name="M:PnP.Core.Auth.Services.Http.MsalHttpClientFactory.GetHttpClient">
+            <summary>
+            Returns the configured <see cref="T:System.Net.Http.HttpClient"/>
+            </summary>
+            <returns>The configured <see cref="T:System.Net.Http.HttpClient"/></returns>
+        </member>
+        <member name="T:PnP.Core.Auth.Services.Http.MsalRetryHandler">
+            <summary>
+            Retry handler for Azure AD authentication requests via MSAL
+            </summary>
+        </member>
+        <member name="T:PnP.Core.Auth.Services.IAuthenticationProviderFactory">
+            <summary>
+            Public interface for the injectable service to create instances of the interface IAuthenticationProvider
+            </summary>
+        </member>
+        <member name="M:PnP.Core.Auth.Services.IAuthenticationProviderFactory.Create(System.String)">
+            <summary>
+            Creates a new instance of IAuthenticationProvider based on a provided configuration name
+            </summary>
+            <param name="name">The name of the IAuthenticationProvider configuration to use</param>
+            <returns>An object that implements IAuthenticationProvider based on the provided configuration name</returns>
+        </member>
+        <member name="M:PnP.Core.Auth.Services.IAuthenticationProviderFactory.CreateDefault">
+            <summary>
+            Creates the default instance of IAuthenticationProvider based on the configuration
+            </summary>
+            <returns>An object that implements IAuthenticationProvider based on the configuration</returns>
+        </member>
+        <member name="T:PnP.Core.Auth.Services.IAuthenticationProviderOptions">
+            <summary>
+            Basic interface for all the Authentication Provider configurations
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.IAuthenticationProviderOptions.ClientId">
+            <summary>
+            The ClientId of the application to use for authentication
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.IAuthenticationProviderOptions.TenantId">
+            <summary>
+            The Tenant ID for the application, can be "organizations" for multi-tenant applications
+            </summary>
+        </member>
+        <member name="P:PnP.Core.Auth.Services.IAuthenticationProviderOptions.AuthenticationProviderType">
+            <summary>
+            Defines the type of the IAuthenticationProvider to create
+            </summary>
+        </member>
+        <member name="M:PnP.Core.Auth.Utilities.ApplicationBuilderExtensions.WithPnPAdditionalAuthenticationSettings``1(Microsoft.Identity.Client.AbstractApplicationBuilder{``0},System.Uri,System.Uri,System.String,System.Nullable{PnP.Core.Services.Microsoft365Environment},System.String)">
+            <summary>
+            Helper method that configures an ApplicationBuilder object with the given options
+            </summary>
+            <typeparam name="T">The type built by the ApplicationBuilder</typeparam>
+            <param name="builder">The extended ApplicationBuilder</param>
+            <param name="authorityUri">The URI of the Azure Active Directory Authority</param>
+            <param name="redirectUri">The Redirect URI for authentication</param>
+            <param name="tenantId">The ID of the Azure Active Directory Tenant</param>
+            <param name="environment">Information about the configured cloud environment</param>
+            <param name="azureADLoginAuthority">Returns the Azure AD Login authority (e.g. login.microsoftonline.com) to use when environment is set to <see cref="F:PnP.Core.Services.Microsoft365Environment.Custom"/></param>
+            <returns></returns>
+        </member>
+        <member name="T:PnP.Core.Auth.SecurityExtensions">
+            <summary>
+            Extensions class that support certificate based encryption/decryption and SecureString protection
+            </summary>
+        </member>
+        <member name="M:PnP.Core.Auth.SecurityExtensions.Encrypt(System.String,System.String)">
+            <summary>
+            Encrypt a piece of text based on a given certificate
+            </summary>
+            <param name="stringToEncrypt">Text to encrypt</param>
+            <param name="thumbPrint">Thumbprint of the certificate to use</param>
+            <returns>Encrypted text</returns>
+        </member>
+        <member name="M:PnP.Core.Auth.SecurityExtensions.Decrypt(System.String,System.String)">
+            <summary>
+            Decrypt a piece of text based on a given certificate
+            </summary>
+            <param name="stringToDecrypt">Text to decrypt</param>
+            <param name="thumbPrint">Thumbprint of the certificate to use</param>
+            <returns>Decrypted text</returns>
+        </member>
+        <member name="M:PnP.Core.Auth.SecurityExtensions.ToSecureString(System.String)">
+            <summary>
+            Converts a string to a SecureString
+            </summary>
+            <param name="input">String to convert</param>
+            <returns>SecureString representation of the passed in string</returns>
+        </member>
+        <member name="M:PnP.Core.Auth.SecurityExtensions.ToInsecureString(System.Security.SecureString)">
+            <summary>
+            Converts a SecureString to a "regular" string
+            </summary>
+            <param name="input">SecureString to convert</param>
+            <returns>A "regular" string representation of the passed SecureString</returns>
+        </member>
+        <member name="T:PnP.Core.Auth.X509CertificateUtility">
+            <summary>
+            Supporting class for certificate based operations
+            </summary>
+        </member>
+        <member name="M:PnP.Core.Auth.X509CertificateUtility.LoadCertificate(System.Security.Cryptography.X509Certificates.StoreName,System.Security.Cryptography.X509Certificates.StoreLocation,System.String)">
+            <summary>
+            Loads a certificate from a given certificate store
+            </summary>
+            <param name="storeName">Name of the certificate store</param>
+            <param name="storeLocation">Location of the certificate store</param>
+            <param name="thumbprint">Thumbprint of the certificate to load</param>
+            <returns>An <see cref="T:System.Security.Cryptography.X509Certificates.X509Certificate2"/> certificate</returns>
+        </member>
+        <member name="M:PnP.Core.Auth.X509CertificateUtility.Encrypt(System.Byte[],System.Security.Cryptography.X509Certificates.X509Certificate2)">
+            <summary>
+            Encrypts data based on the RSACryptoServiceProvider
+            </summary>
+            <param name="plainData">Bytes to encrypt</param>
+            <param name="certificate">Certificate to use</param>
+            <returns>Encrypted bytes</returns>
+        </member>
+        <member name="M:PnP.Core.Auth.X509CertificateUtility.Decrypt(System.Byte[],System.Security.Cryptography.X509Certificates.X509Certificate2)">
+            <summary>
+            Decrypts data based on the RSACryptoServiceProvider
+            </summary>
+            <param name="encryptedData">Bytes to decrypt</param>
+            <param name="certificate">Certificate to use</param>
+            <returns>Decrypted bytes</returns>
+        </member>
+        <member name="T:Microsoft.Extensions.DependencyInjection.AuthenticationCollectionExtensions">
+            <summary>
+            Extension methods to assist with setting up the <see cref="T:PnP.Core.Services.IAuthenticationProvider"/> infrastructure
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.AuthenticationCollectionExtensions.AddPnPCoreAuthentication(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Adds all the <see cref="T:PnP.Core.Services.IAuthenticationProvider"/> flavors to the collection of loaded services
+            </summary>
+            <param name="collection">Collection of loaded services</param>
+            <returns>Collection of loaded services</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.AuthenticationCollectionExtensions.AddPnPCoreAuthentication(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationOptions})">
+            <summary>
+            Adds all the <see cref="T:PnP.Core.Services.IAuthenticationProvider"/> flavors to the collection of loaded services
+            </summary>
+            <param name="collection">Collection of loaded services</param>
+            <param name="options"><see cref="T:PnP.Core.Auth.Services.Builder.Configuration.PnPCoreAuthenticationOptions"/> options to use for configuration</param>
+            <returns>Collection of loaded services</returns>
+        </member>
+    </members>
+</doc>
